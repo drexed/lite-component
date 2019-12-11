@@ -5,7 +5,9 @@ module Lite
     module ComponentHelper
 
       def component(name, attrs = nil, &block)
-        "#{name}_component".classify.constantize.new(self, attrs, &block).render
+        name = name.component_name if name.respond_to?(:component_name)
+        klass = "#{name}_component".classify.safe_constantize.new(self, attrs, &block)
+        klass.render
       end
 
     end

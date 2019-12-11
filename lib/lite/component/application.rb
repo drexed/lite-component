@@ -2,10 +2,11 @@
 
 module Lite
   module Component
+    class Error < StandardError; end
 
     def self.names
       Dir.chdir(path) do
-        Dir.glob('**/*_component.rb').map { |component| component.chomp('_component.rb') }.sort
+        Dir.glob('**/*_component.rb').map { |name| name.chomp('_component.rb') }
       end
     end
 
