@@ -2,6 +2,7 @@
 
 module Lite
   module Component
+
     class Error < StandardError; end
 
     def self.names

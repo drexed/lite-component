@@ -17,6 +17,7 @@ module Lite
       end
 
       class << self
+
         def attribute(name, default: nil)
           attributes[name] = { default: default }
           define_method_or_raise(name) { get_instance_variable(name) }
@@ -26,6 +27,8 @@ module Lite
           @attributes ||= {}
         end
 
+        # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+        # rubocop:disable Metrics/MethodLength, Metrics/PerceivedComplexity
         def element(name, multiple: false, &config)
           plural_name = name.to_s.pluralize.to_sym if multiple
 
@@ -50,6 +53,8 @@ module Lite
 
           define_method_or_raise(plural_name) { get_instance_variable(plural_name) }
         end
+        # rubocop:enable Metrics/MethodLength, Metrics/PerceivedComplexity
+        # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
 
         def elements
           @elements ||= {}
@@ -62,12 +67,11 @@ module Lite
         private
 
         def define_method_or_raise(method_name, &block)
-          if method_defined?(method_name.to_sym)
-            raise Lite::Component::Error, "Method #{method_name.inspect} already exists"
-          else
-            define_method(method_name, &block)
-          end
+          return define_method(method_name, &block) unless method_defined?(method_name.to_sym)
+
+          raise Lite::Component::Error, "Method #{method_name.inspect} already exists"
         end
+
       end
 
       def to_s

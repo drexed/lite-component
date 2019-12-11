@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    lite-component (0.1.0)
+    lite-component (1.0.0)
       rails (>= 5.1.0)
 
 GEM

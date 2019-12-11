@@ -5,6 +5,7 @@ module Lite
     class Base < Lite::Component::Element
 
       class << self
+
         def model_name
           ActiveModel::Name.new(Lite::Component::Base)
         end
@@ -16,6 +17,7 @@ module Lite
         def component_path
           name.chomp('Component').underscore
         end
+
       end
 
       def render
