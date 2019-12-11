@@ -1,9 +1,7 @@
-RSpec.describe Lite::Component do
-  it "has a version number" do
-    expect(Lite::Component::VERSION).not_to be nil
-  end
+# frozen_string_literal: true
 
-  it "does something useful" do
-    expect(false).to eq(true)
+RSpec.describe Lite::Component do
+  it 'to be a version number' do
+    expect(Lite::Component::VERSION).not_to be nil
   end
 end
