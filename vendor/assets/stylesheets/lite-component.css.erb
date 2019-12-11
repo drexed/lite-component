@@ -1,0 +1,7 @@
+<% Lite::Component.names.each do |name| %>
+  <% begin %>
+    <% require_asset("#{name}/#{name.split('/').last}") %>
+  <% rescue Sprockets::FileNotFound %>
+    <% Rails.logger.debug("Lite::Component: CSS not found for #{name}") %>
+  <% end %>
+<% end %>

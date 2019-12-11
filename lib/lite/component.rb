@@ -1,3 +1,5 @@
 # frozen_string_literal: true
 
-require 'lite/component/version'
+%w[version application engine element base].each do |filename|
+  require "lite/component/#{filename}"
+end
