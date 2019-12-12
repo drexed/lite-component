@@ -4,4 +4,4 @@
   require "lite/component/#{filename}"
 end
 
-require 'generators/install_generator'
+require 'generators/component_generator'

@@ -1,7 +1,12 @@
 # frozen_string_literal: true
 
+require 'rails'
+require 'active_record'
 require 'bundler/setup'
 require 'lite/component'
+require 'generator_spec'
+
+spec_path = Pathname.new(File.expand_path('../spec', File.dirname(__FILE__)))
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -12,5 +17,10 @@ RSpec.configure do |config|
 
   config.expect_with :rspec do |c|
     c.syntax = :expect
+  end
+
+  config.after(:all) do
+    temp_path = spec_path.join('generators/tmp')
+    FileUtils.remove_dir(temp_path) if File.directory?(temp_path)
   end
 end
