@@ -11,14 +11,14 @@ RSpec.describe Lite::Component::Base do
 
   describe '#initialize' do
     it 'to be nil when no values given' do
-      component_class = Class.new(Lite::Component::Base)
+      component_class = Class.new(described_class)
       component = component_class.new(view_class.new)
 
       expect(component.to_s).to be nil
     end
 
     it 'to be "foo" when block given' do
-      component_class = Class.new(Lite::Component::Base)
+      component_class = Class.new(described_class)
       component = component_class.new(view_class.new) { 'foo' }
 
       expect(component.to_s).to eq('foo')
@@ -26,14 +26,14 @@ RSpec.describe Lite::Component::Base do
 
     it 'to raise Lite::Component::BuildError when overwriting existing method with attribute' do
       expect do
-        Class.new(Lite::Component::Base) do
+        Class.new(described_class) do
           attribute :to_s
         end
       end.to raise_error(Lite::Component::BuildError, 'Method :to_s already exists')
     end
 
     it 'to be nil when attribute with no value' do
-      component_class = Class.new(Lite::Component::Base) do
+      component_class = Class.new(described_class) do
         attribute :foo
       end
       component = component_class.new(view_class.new)
@@ -42,7 +42,7 @@ RSpec.describe Lite::Component::Base do
     end
 
     it 'to be "foo" when attribute with value' do
-      component_class = Class.new(Lite::Component::Base) do
+      component_class = Class.new(described_class) do
         attribute :foo
       end
       component = component_class.new(view_class.new, foo: 'foo')
@@ -51,7 +51,7 @@ RSpec.describe Lite::Component::Base do
     end
 
     it 'to be "foo" when attribute with default value' do
-      component_class = Class.new(Lite::Component::Base) do
+      component_class = Class.new(described_class) do
         attribute :foo, default: 'foo'
       end
       component = component_class.new(view_class.new)
@@ -61,7 +61,7 @@ RSpec.describe Lite::Component::Base do
 
     it 'to raise Lite::Component::BuildError when overwriting existing method with element' do
       expect do
-        Class.new(Lite::Component::Base) do
+        Class.new(described_class) do
           def foo
             'foo'
           end
@@ -72,7 +72,7 @@ RSpec.describe Lite::Component::Base do
     end
 
     it 'to be "foo" when element with block' do
-      component_class = Class.new(Lite::Component::Base) do
+      component_class = Class.new(described_class) do
         element :foo
       end
       component = component_class.new(view_class.new)
@@ -83,7 +83,7 @@ RSpec.describe Lite::Component::Base do
     end
 
     it 'to be "baz" when element with attribute with value' do
-      component_class = Class.new(Lite::Component::Base) do
+      component_class = Class.new(described_class) do
         element :foo do
           attribute :bar
         end
@@ -95,7 +95,7 @@ RSpec.describe Lite::Component::Base do
     end
 
     it 'to be the value of each element with block with nested element with block' do
-      component_class = Class.new(Lite::Component::Base) do
+      component_class = Class.new(described_class) do
         element :foo do
           element :bar
         end
@@ -112,7 +112,7 @@ RSpec.describe Lite::Component::Base do
     end
 
     it 'to be the value of each element with multiple true' do
-      component_class = Class.new(Lite::Component::Base) do
+      component_class = Class.new(described_class) do
         element :foo, multiple: true
       end
       component = component_class.new(view_class.new)
@@ -126,7 +126,7 @@ RSpec.describe Lite::Component::Base do
 
     # rubocop:disable Metrics/LineLength
     it 'to be the value of each element with multiple true when singular and plural name are the same' do
-      component_class = Class.new(Lite::Component::Base) do
+      component_class = Class.new(described_class) do
         element :foos, multiple: true
       end
       component = component_class.new(view_class.new)
@@ -140,7 +140,7 @@ RSpec.describe Lite::Component::Base do
     # rubocop:enable Metrics/LineLength
 
     it 'to be nil when element is not set' do
-      component_class = Class.new(Lite::Component::Base) do
+      component_class = Class.new(described_class) do
         element :foo
       end
       component = component_class.new(view_class.new)
@@ -149,7 +149,7 @@ RSpec.describe Lite::Component::Base do
     end
 
     it 'to be nil when element with multiple true is not set' do
-      component_class = Class.new(Lite::Component::Base) do
+      component_class = Class.new(described_class) do
         element :foo, multiple: true
       end
       component = component_class.new(view_class.new)
@@ -158,7 +158,7 @@ RSpec.describe Lite::Component::Base do
     end
 
     it 'to not raise error when element with multiple true is not set' do
-      component_class = Class.new(Lite::Component::Base) do
+      component_class = Class.new(described_class) do
         attribute :foo
         validates :foo, presence: true
       end
@@ -169,7 +169,7 @@ RSpec.describe Lite::Component::Base do
     end
 
     it 'to raise Lite::Component::ValidationError when without attribute and failing validation' do
-      component_class = Class.new(Lite::Component::Base) do
+      component_class = Class.new(described_class) do
         attribute :foo
         validates :foo, presence: true
       end
@@ -180,7 +180,7 @@ RSpec.describe Lite::Component::Base do
     end
 
     it 'to not raise error when with default value and successful validation' do
-      component_class = Class.new(Lite::Component::Base) do
+      component_class = Class.new(described_class) do
         attribute :foo, default: 'bar'
         validates :foo, presence: true
       end
@@ -191,7 +191,7 @@ RSpec.describe Lite::Component::Base do
     end
 
     it 'to not raise error when element and successful element validation' do
-      component_class = Class.new(Lite::Component::Base) do
+      component_class = Class.new(described_class) do
         element :foo
         validates :foo, presence: true
       end
@@ -204,7 +204,7 @@ RSpec.describe Lite::Component::Base do
     end
 
     it 'to raise Lite::Component::ValidationError when element and failing element validation' do
-      component_class = Class.new(Lite::Component::Base) do
+      component_class = Class.new(described_class) do
         element :foo
         validates :foo, presence: true
       end
@@ -215,7 +215,7 @@ RSpec.describe Lite::Component::Base do
     end
 
     it 'to not raise error when element and successful element attribute validation' do
-      component_class = Class.new(Lite::Component::Base) do
+      component_class = Class.new(described_class) do
         element :foo do
           attribute :bar
           validates :bar, presence: true
@@ -231,7 +231,7 @@ RSpec.describe Lite::Component::Base do
 
     # rubocop:disable Metrics/LineLength
     it 'to raise Lite::Component::ValidationError when element and failing element attribute validation' do
-      component_class = Class.new(Lite::Component::Base) do
+      component_class = Class.new(described_class) do
         element :foo do
           attribute :bar
           validates :bar, presence: true
