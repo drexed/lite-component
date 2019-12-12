@@ -432,7 +432,7 @@ end
 
 ```erb
 <%= component "button", label: "Sign up", url: sign_up_path, context: "primary" %>
-<%= component "button", label: "Sign in", url: sign_in_path %>
+<%= component ButtonComponent, label: "Sign in", url: sign_in_path %>
 ```
 
 ### Namespaced components
