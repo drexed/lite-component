@@ -6,16 +6,16 @@ module Lite
 
       class << self
 
-        def model_name
-          ActiveModel::Name.new(Lite::Component::Base)
-        end
-
         def component_name
-          name.chomp('Component').demodulize.underscore
+          component_path.split('/').last
         end
 
         def component_path
           name.chomp('Component').underscore
+        end
+
+        def model_name
+          ActiveModel::Name.new(Lite::Component::Base)
         end
 
       end
@@ -25,10 +25,7 @@ module Lite
       end
 
       def to_partial_path
-        [
-          self.class.component_path,
-          self.class.component_name
-        ].join('/')
+        "components/#{self.class.component_path}"
       end
 
     end

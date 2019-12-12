@@ -1,7 +1,7 @@
 <% Lite::Component.names.each do |name| %>
   <% begin %>
-    <% require_asset("#{name}/#{name.split('/').last}") %>
+    <% require_asset("components/#{name}") %>
   <% rescue Sprockets::FileNotFound %>
-    <% Rails.logger.debug("Lite::Component: JS not found for #{name}") %>
+    <%# Do nothing %>
   <% end %>
 <% end %>

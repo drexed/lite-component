@@ -6,9 +6,11 @@ module Lite
     class Error < StandardError; end
 
     def self.names
-      Dir.chdir(path) do
-        Dir.glob('**/*_component.rb').map { |name| name.chomp('_component.rb') }
-      end
+      components_ext = '_component.rb'
+      components_dir = "#{path.to_s}/"
+      components_glob = path.join("**/*#{components_ext}")
+
+      Dir.glob(components_glob).map { |name| name.sub(components_dir, '').chomp(components_ext) }
     end
 
     def self.path
