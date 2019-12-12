@@ -3,8 +3,6 @@
 module Lite
   module Component
 
-    class Error < StandardError; end
-
     def self.names
       components_ext = '_component.rb'
       components_dir = "#{path}/"

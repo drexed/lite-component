@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'rails'
-require 'active_record'
 require 'bundler/setup'
 require 'lite/component'
 require 'generator_spec'

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'rails'
+require 'active_record'
 require 'spec_helper'
 
 RSpec.describe ComponentGenerator, type: :generator do
@@ -37,7 +39,7 @@ RSpec.describe ComponentGenerator, type: :generator do
       expect(File.exist?(path)).to eq(true)
     end
 
-    it 'to be true when component file exists' do
+    it 'to be true when erb file exists' do
       path = 'spec/generators/tmp/app/views/components/sample/_test.html.erb'
 
       expect(File.exist?(path)).to eq(true)

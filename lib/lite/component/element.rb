@@ -14,6 +14,8 @@ module Lite
         @yield = block_given? ? @view.capture(self, &block) : nil
 
         validate!
+      rescue ActiveModel::ValidationError => e
+        raise Lite::Component::ValidationError, e.message
       end
 
       class << self
@@ -69,7 +71,7 @@ module Lite
         def define_method_or_raise(method_name, &block)
           return define_method(method_name, &block) unless method_defined?(method_name.to_sym)
 
-          raise Lite::Component::Error, "Method #{method_name.inspect} already exists"
+          raise Lite::Component::BuildError, "Method #{method_name.inspect} already exists"
         end
 
       end
@@ -77,6 +79,8 @@ module Lite
       def to_s
         @yield
       end
+
+      alias render to_s
 
       protected
 
