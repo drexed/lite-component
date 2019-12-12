@@ -27,6 +27,7 @@ Or install it yourself as:
 * [Setup](#setup)
   * [Generator](#generator)
   * [Assets](#assets)
+  * [Components](#components)
 * [Usage](#usage)
   * [Attribute and blocks](#attributes-and-blocks)
   * [Attributes defaults](#attribute-defaults)
@@ -68,6 +69,11 @@ In order to require assets such manually require them in the manifest, e.g. `app
  */
 ```
 
+### Components
+
+If you create a `ApplicationComponent` file in the `app/components` directory, the generator
+will create file that inherit from `ApplicationComponent` if not `Lite::Component::Base`.
+
 ## Usage
 
 ### Attributes and blocks
@@ -76,7 +82,7 @@ There are two ways of passing data to components: `attributes` and `blocks`. Att
 to inject HTML content into components.
 
 ```ruby
-# app/components/alert_component.rb %>
+# app/components/alert_component.rb
 
 class AlertComponent < Components::Component
   attribute :context
@@ -85,7 +91,7 @@ end
 ```
 
 ```erb
-<% # app/components/alert/_alert.html.erb %>
+<% # app/views/components/_alert.html.erb %>
 
 <div class="alert alert--<%= alert.context %>" role="alert">
   <%= alert.message %>
@@ -94,13 +100,13 @@ end
 
 ```erb
 <%= component "alert", message: "Something went right!", context: "success" %>
-<%= component "alert", message: "Something went wrong!", context: "danger" %>
+<%= component AlertComponent, message: "Something went wrong!", context: "danger" %>
 ```
 
 To inject some text or HTML content into our component we can print the component variable in our template, and populate it by passing a block to the component helper:
 
 ```erb
-<% # app/components/alert/_alert.html.erb %>
+<% # app/views/components/_alert.html.erb %>
 
 <div class="alert alert--<%= alert.context %>" role="alert">
   <%= alert %>
@@ -116,7 +122,7 @@ To inject some text or HTML content into our component we can print the componen
 Another good use case for attributes is when you have a component backed by a model:
 
 ```ruby
-# app/components/comment_component.rb %>
+# app/components/comment_component.rb
 
 class CommentComponent < Components::Component
   attribute :comment
@@ -126,7 +132,7 @@ end
 ```
 
 ```erb
-<% # app/components/comment/_comment.html.erb %>
+<% # app/views/components/_comment.html.erb %>
 
 <div id="comment-<%= comment.id %>" class="comment">
   <div class="comment__author">
@@ -149,7 +155,7 @@ end
 Attributes can have default values:
 
 ```ruby
-# app/components/alert_component.rb %>
+# app/components/alert_component.rb
 
 class AlertComponent < Components::Component
   attribute :message
@@ -162,7 +168,7 @@ end
 It's easy to override an attribute with additional logic:
 
 ```ruby
-# app/components/alert_component.rb %>
+# app/components/alert_component.rb
 
 class AlertComponent < Components::Component
   attribute :message
@@ -179,7 +185,7 @@ end
 To ensure your components get initialized properly you can use `ActiveModel::Validations` in your elements or components:
 
 ```ruby
-# app/components/alert_component.rb %>
+# app/components/alert_component.rb
 
 class AlertComponent < Components::Component
   attribute :label
@@ -188,7 +194,7 @@ class AlertComponent < Components::Component
 end
 ```
 
-Your validations will be executed during the components initialization and raise an `ActiveModel::ValidationError` if any validation fails.
+Your validations will be executed during the components initialization and raise an `Lite::Component::ValidationError` if any validation fails.
 
 ### Elements
 
@@ -221,7 +227,7 @@ There are two problems with this approach:
 Using this gem, the same component can be written like this:
 
 ```ruby
-# app/components/card_component.rb %>
+# app/components/card_component.rb
 
 class CardComponent < Components::Component
   attribute :flush, default: false
@@ -239,7 +245,7 @@ end
 ```
 
 ```erb
-<% # app/components/card/_card.html.erb %>
+<% # app/views/components/_card.html.erb %>
 
 <div class="card <%= "card--flush" if card.flush %>">
   <div class="card__header <%= "card__header--centered" if card.header.centered %>">
@@ -282,7 +288,7 @@ Multiple calls to a repeating element, such as `section` in the example above, w
 Another good use case is a navigation component:
 
 ```ruby
-# app/components/navigation_component.rb %>
+# app/components/navigation_component.rb
 
 class NavigationComponent < Components::Component
   element :items, multiple: true do
@@ -309,6 +315,8 @@ An alternative here is to pass a data structure to the component as an attribute
 Elements can have validations, too:
 
 ```ruby
+# app/components/navigation_component.rb
+
 class NavigationComponent < Components::Component
   element :items, multiple: true do
     attribute :label
@@ -324,7 +332,7 @@ end
 Elements can also be nested, although it is recommended to keep nesting to a minimum:
 
 ```ruby
-# app/components/card_component.rb %>
+# app/components/card_component.rb
 
 class CardComponent < Components::Component
   ...
@@ -343,7 +351,7 @@ end
 In addition to declaring attributes and elements, it is also possible to declare helper methods. This is useful if you prefer to keep logic out of your templates. Let's extract the modifier logic from the card component template:
 
 ```ruby
-# app/components/card_component.rb %>
+# app/components/card_component.rb
 
 class CardComponent < Components::Component
   ...
@@ -357,7 +365,7 @@ end
 ```
 
 ```erb
-<% # app/components/card/_card.html.erb %>
+<% # app/views/components/_card.html.erb %>
 
 <%= content_tag :div, class: card.css_classes do %>
   ...
@@ -385,7 +393,7 @@ end
 ```
 
 ```erb
-<% # app/components/card/_card.html.erb %>
+<% # app/views/components/_card.html.erb %>
 
 <%= content_tag :div, class: card.css_classes do %>
   ...
@@ -403,7 +411,7 @@ Helper methods can also make use of the `@view` instance variable in order to ca
 For some small components, such as buttons, it might make sense to skip the partial altogether, in order to speed up rendering. This can be done by overriding `render` on the component:
 
 ```ruby
-# app/components/button_component.rb %>
+# app/components/button_component.rb
 
 class ButtonComponent < Components::Component
   attribute :label
