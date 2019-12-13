@@ -75,6 +75,18 @@ In order to require assets such manually require them in the manifest, e.g. `app
 If you create a `ApplicationComponent` file in the `app/components` directory, the generator
 will create file that inherit from `ApplicationComponent` if not `Lite::Component::Base`.
 
+Components come with view helpers already included.
+
+If you want to access route helpers in your components just include them like:
+
+```ruby
+# app/components/alert_component.rb
+
+class AlertComponent < Components::Component
+  include Rails.application.routes.url_helpers
+end
+```
+
 ## Usage
 
 ### Attributes and blocks

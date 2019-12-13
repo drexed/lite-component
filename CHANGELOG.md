@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.0] - 2019-12-10
+## [1.0.1] - 2019-12-13
+### Added
+- Included action view helpers and context
+### Changed
+- Renamed view variable to context to allow more action view includes
+
+## [1.0.0] - 2019-12-12
 ### Added
 - Initial project version

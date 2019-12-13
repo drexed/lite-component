@@ -1,17 +1,23 @@
 # frozen_string_literal: true
 
+require 'action_view'
+
 module Lite
   module Component
     class Element
 
       include ActiveModel::Validations
+      include ActionView::Context
+      include ActionView::Helpers
 
-      def initialize(view, attributes = nil, &block)
+      attr_reader :context
+
+      def initialize(context, attributes = nil, &block)
         initialize_attributes(attributes || {})
         initialize_elements
 
-        @view = view
-        @yield = block_given? ? @view.capture(self, &block) : nil
+        @context = context
+        @yield = block_given? ? @context.capture(self, &block) : nil
 
         validate!
       rescue ActiveModel::ValidationError => e
@@ -42,7 +48,7 @@ module Lite
           define_method_or_raise(name) do |attributes = nil, &block|
             return get_instance_variable(multiple ? plural_name : name) unless attributes || block
 
-            element = self.class.elements[name][:class].new(@view, attributes, &block)
+            element = self.class.elements[name][:class].new(context, attributes, &block)
 
             if multiple
               get_instance_variable(plural_name) << element

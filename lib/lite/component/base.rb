@@ -21,7 +21,7 @@ module Lite
       end
 
       def render
-        @view.render(partial: to_partial_path, object: self)
+        context.render(partial: to_partial_path, object: self)
       end
 
       def to_partial_path
