@@ -56,6 +56,7 @@ In the basic Rails app setup component `*.scss` and `*.js` will be automatically
 via the tree lookup.
 
 In order to require assets such manually require them in the manifest, e.g. `application.css`:
+*Similar process for both CSS and JS*
 
 ```
 /*
