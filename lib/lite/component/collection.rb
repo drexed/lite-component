@@ -28,16 +28,17 @@ module Lite
         @collection_size ||= collection.size
       end
 
-      # rubocop:disable Metrics/LineLength
       def iterated_collection
         collection.each_with_object([]).with_index do |(object, array), index|
-          iteration = Lite::Component::Iteration.new(object, collection_size, index)
+          component.iteration = Lite::Component::Iteration.new(object, collection_size, index)
+          component.options.deep_merge!(locals: { iteration: component.iteration })
 
-          array << component.context.render(component.options.deep_merge(locals: { iteration: iteration }))
-          array << component.context.render(spacer_template) if spacer_template && !iteration.last?
+          array << component.context.render(component.options)
+          next unless spacer_template && !component.iteration.last?
+
+          array << component.context.render(spacer_template)
         end
       end
-      # rubocop:enable Metrics/LineLength
     end
   end
 end
