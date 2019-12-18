@@ -2,32 +2,46 @@
 
 module Lite
   module Component
-    class Base < Lite::Component::Element
+    class Base
+      include ActionView::Context
+      include ActionView::Helpers
+
+      attr_reader :context, :options
+
+      def initialize(context, options = {})
+        @context = context
+        @options = { partial: to_partial_path, object: self, as: :component }.merge(options)
+      end
 
       class << self
-
         def component_name
           component_path.split('/').last
         end
 
         def component_path
-          name.chomp('Component').underscore
+          name.underscore.sub('_component', '')
         end
 
-        def model_name
-          ActiveModel::Name.new(Lite::Component::Base)
+        def render(context, options = {})
+          klass = new(context, options)
+          klass.render
         end
-
       end
 
       def render
-        context.render(partial: to_partial_path, object: self)
+        collection = options.delete(:collection)
+        return context.render(options) unless collection.respond_to?(:to_a)
+
+        Lite::Component::Collection.render(
+          collection,
+          component: self,
+          spacer_template: options.delete(:spacer_template)
+        )
       end
 
       def to_partial_path
-        "components/#{self.class.component_path}"
+        "components/#{self.class.component_name}"
       end
-
     end
   end
 end

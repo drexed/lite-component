@@ -1,7 +1,0 @@
-<% Lite::Component.names.each do |name| %>
-  <% begin %>
-    <% require_asset("components/#{name}") %>
-  <% rescue Sprockets::FileNotFound %>
-    <%# Do nothing %>
-  <% end %>
-<% end %>

@@ -4,10 +4,9 @@ module Lite
   module Component
     module ComponentHelper
 
-      def component(name, attrs = nil, &block)
+      def component(name, options = {})
         name = name.component_path if name.respond_to?(:component_path)
-        klass = "#{name}_component".classify.constantize.new(self, attrs, &block)
-        klass.render
+        "#{name}_component".classify.constantize.render(self, options)
       end
 
     end
