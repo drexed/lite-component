@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-require 'rails'
-require 'active_record'
 require 'spec_helper'
 
-RSpec.describe ComponentGenerator, type: :generator do
+RSpec.describe Rails::ComponentGenerator, type: :generator do
   destination(File.expand_path('../../tmp', __FILE__))
   arguments %w[sample/test]
 

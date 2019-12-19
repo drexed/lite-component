@@ -3,6 +3,7 @@
 module Lite
   module Component
     class Locals
+
       attr_reader :locals
 
       def initialize(locals)
@@ -22,6 +23,7 @@ module Lite
       def respond_to_missing?(method_name, include_private = false)
         locals.key?(method_name) || super
       end
+
     end
   end
 end

@@ -3,6 +3,7 @@
 module Lite
   module Component
     class Iteration
+
       attr_reader :index, :size
 
       def initialize(size, index)
@@ -17,6 +18,7 @@ module Lite
       def last?
         index == (size - 1)
       end
+
     end
   end
 end

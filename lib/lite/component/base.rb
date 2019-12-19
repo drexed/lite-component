@@ -3,11 +3,12 @@
 module Lite
   module Component
     class Base
+
       include ActionView::Context
       include ActionView::Helpers
 
       attr_reader :context, :options
-      attr_accessor :iteration
+      attr_writer :iteration
 
       def initialize(context, options = {})
         @context = context
@@ -19,6 +20,7 @@ module Lite
       alias h helpers
 
       class << self
+
         def component_name
           component_path.split('/').last
         end
@@ -31,6 +33,7 @@ module Lite
           klass = new(context, options)
           klass.render
         end
+
       end
 
       def iteration
@@ -77,6 +80,7 @@ module Lite
           }
         }
       end
+
     end
   end
 end

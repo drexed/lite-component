@@ -4,4 +4,4 @@
   require "lite/component/#{filename}"
 end
 
-require 'generators/component_generator'
+require 'generators/rails/component_generator'

@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.2] - 2019-12-19
+### Changed
+- Rewrite the internals of component building and rendering
+- Move location of generators to be rails namespaced
+
 ## [1.0.1] - 2019-12-13
 ### Added
 - Included action view helpers and context

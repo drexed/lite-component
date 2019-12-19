@@ -1,0 +1,11 @@
+Description:
+    Generate a component file
+
+Example:
+    rails generate component NAME
+
+    This will create:
+        - app/assets/javascripts/components/[name].js
+        - app/assets/stylesheets/components/[name].scss
+        - app/components/[name]_query.rb
+        - app/views/components/_[name].html.erb

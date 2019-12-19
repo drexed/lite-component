@@ -3,6 +3,7 @@
 module Lite
   module Component
     class Collection
+
       attr_reader :collection, :component, :spacer_template
 
       def initialize(collection, component:, spacer_template: nil)
@@ -12,10 +13,12 @@ module Lite
       end
 
       class << self
+
         def render(collection, component)
           klass = new(collection, component)
           klass.render
         end
+
       end
 
       def render
@@ -28,6 +31,7 @@ module Lite
         @collection_size ||= collection.size
       end
 
+      # rubocop:disable Metrics/AbcSize
       def iterated_collection
         collection.each_with_object([]).with_index do |(object, array), index|
           component.iteration = Lite::Component::Iteration.new(collection_size, index)
@@ -39,6 +43,8 @@ module Lite
           array << component.context.render(spacer_template)
         end
       end
+      # rubocop:enable Metrics/AbcSize
+
     end
   end
 end

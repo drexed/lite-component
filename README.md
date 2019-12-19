@@ -43,10 +43,10 @@ Or install it yourself as:
 Use `rails g component NAME` will generate the following files:
 
 ```
-/app/assets/javascripts/components/NAME.js
-/app/assets/stylesheets/components/NAME.scss
-/app/components/NAME_query.rb
-/app/views/components/_NAME.html.erb
+app/assets/javascripts/components/[name].js
+app/assets/stylesheets/components/[name].scss
+app/components/[name]_query.rb
+app/views/components/_[name].html.erb
 ```
 
 The generator also takes `--skip-css`, `--skip-js` and `--skip-erb` options. It will also
