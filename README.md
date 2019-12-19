@@ -27,40 +27,41 @@ Or install it yourself as:
 * [Setup](#setup)
   * [Generator](#generator)
   * [Assets](#assets)
-  * [Components](#components)
+  * [Routes](#routes)
 * [Usage](#usage)
-  * [Attribute and blocks](#attributes-and-blocks)
-  * [Attributes defaults](#attribute-defaults)
-  * [Attributes overrides](#attribute-overrides)
-  * [Elements](#elements)
-  * [Helper methods](#helper-methods)
-  * [Rendering components without a partial](#rendering-components-without-a-partial)
-  * [Namespaced components](#namespaced-components)
+  * [Rendering](#rendering)
+  * [Context](#context)
+  * [Helpers](#helpers)
+  * [Locals](#locals)
+  * [Iterations](#iterations)
+  * [Views](#views)
 
 ## Setup
 
 ### Generator
 
 Use `rails g component NAME` will generate the following files:
+
 ```
 /app/assets/javascripts/components/NAME.js
 /app/assets/stylesheets/components/NAME.scss
 /app/components/NAME_query.rb
 /app/views/components/_NAME.html.erb
 ```
-The generator also takes `--skip-css`, `--skip-js` and `--skip-erb` options
+
+The generator also takes `--skip-css`, `--skip-js` and `--skip-erb` options. It will also
+properly namespace nested components.
+
+If a `ApplicationComponent` file in the `app/components` directory is available, the
+generator will create file that inherit from `ApplicationComponent` if not it will
+fallback to `Lite::Component::Base`.
 
 ### Assets
 
-In the basic Rails app setup component `*.scss` and `*.js` will be automatically load
-via the tree lookup.
+Component's `*.scss` and `*.js` will be automatically load via the tree lookup in basic
+Rails setups.
 
-### Components
-
-If you create a `ApplicationComponent` file in the `app/components` directory, the generator
-will create file that inherit from `ApplicationComponent` if not `Lite::Component::Base`.
-
-Components come with view context and helpers already included.
+### Routes
 
 If you want to access route helpers in `*_component.rb` just include them like:
 
@@ -69,50 +70,196 @@ If you want to access route helpers in `*_component.rb` just include them like:
 
 class AlertComponent < Lite::Component::Base
   include Rails.application.routes.url_helpers
+
+  def link_to_account
+    link_to('Return to account', account_path, class: 'text-underline')
+  end
+
 end
 ```
 
 ## Usage
 
-### Components
+### Rendering
+
+To render a component in any view template or partial, you can use the the provided helper.
+Its has the same setup as `render` and takes all [Action View Partials](https://api.rubyonrails.org/classes/ActionView/PartialRenderer.html)
+options.
+
+```erb
+<%= component("alert") %>
+<%= component(AlertComponent, locals: { message: "Something went right!", type: "success" }) %>
+```
+
+Render namespaced components by following standard naming conventions:
+
+```erb
+<%= component("admin/alert") %>
+<%= component(Admin::AlertComponent) %>
+```
+
+Render collection of components just as you would render collections of partials.
+
+```erb
+<%= component("comment_card", collection: @comments, spacer_template: "components/spacer") %>
+```
+
+### Context
+
+All components include `ActionView::Context` which will give you access to request context such as
+helpers, controllers, etc. It can be accessed using `context` or `c` methods.
 
 ```ruby
 # app/components/alert_component.rb
 
 class AlertComponent < Lite::Component::Base
 
-  def close
-    link_to("X", "#", data: { alert: :dismiss })
+  def protected_page?
+    context.controller_name == 'admin'
   end
 
-  def icon
+end
+```
+
+### Helpers
+
+All components include `ActionView::Helpers` which will give you access to default Rails
+helpers without the need to invoke the context. Use the helper methods to access helper methods
+from your `app/helpers` directory. It can be accessed using `helpers` or `h` methods.
+
+```ruby
+# app/components/alert_component.rb
+
+class AlertComponent < Lite::Component::Base
+
+  def close_icon
+    h.icon_tag(:close)
+  end
+
+  def link_to_close
+    link_to(close_icon, '#', data: { alert: :dismiss })
+  end
+
+end
+```
+
+### Locals
+
+All components include access to partial locals via the `locals` or `l` methods.
+*Note: Objects will be automatically added to locals when rendering collections.*
+
+```erb
+<%= component("alert", locals: { object: @user }) %>
+```
+
+```ruby
+# app/components/alert_component.rb
+
+class AlertComponent < Lite::Component::Base
+
+  def type_tag
     <<~HTML.squish.html_safe
-      <i class="icon icon-#{icon_by_context}"></i>
+      <b>#{locals.object.first_name}!</b>
     HTML
   end
 
-  private
+end
+```
 
-  def icon_by_context
-    case
+### Iterations
+
+All components will hav access to an iteration object which can be accessed
+using the `iteration` or `i` methods. It provides access to each iterations
+`first?`, `last?`, `size`, and `index` methods.
+
+```erb
+<%= component("alert", collection: @users) %>
+```
+
+```ruby
+# app/components/alert_component.rb
+
+class AlertComponent < Lite::Component::Base
+
+  def limit_hit?
+    i.index == 5
+  end
+
+end
+```
+
+### Views
+
+*For the following examples, components will have the following setup:*
+
+```ruby
+# app/components/alert_component.rb
+
+class AlertComponent < Lite::Component::Base
+
+  def link_to_back
+    link_to('Go back', :back, class: 'text-underline')
   end
 
 end
 ```
 
 ```erb
-<% # app/views/components/_alert.html.erb %>
+<%= component("alert", collection: @users, locals: { message: "Something went right!", type: "success" }) %>
+```
 
-<div class="alert alert-<%= alert.type %>" role="alert">
-  <%= component.close %>
+Component view partials behave just as a normal view partial would. All locals can be
+accessed by their key.
+
+```erb
+<%# app/views/components/_alert.html.erb %>
+
+<div class="alert alert-<%= type %>" role="alert">
   <%= message %>
-  <%= %>
 </div>
 ```
 
+Access to anything provided within its `*_component.rb` file can be done using the
+`component` local which is the instance of the component.
+
 ```erb
-<%= component "alert", message: "Something went right!", context: "success" %>
-<%= component AlertComponent, message: "Something went wrong!", context: "danger" %>
+<%# app/views/components/_alert.html.erb %>
+
+<div class="alert alert-<%= type %>" role="alert">
+  <%= component.locals.message %>
+  <%= component.link_to_back %>
+</div>
+```
+
+Rendering a collection will automatically give you access to the iteration and object variables.
+
+```erb
+<%# app/views/components/_alert.html.erb %>
+
+<div class="alert alert-<%= type %>" role="alert">
+  <% if iteration.size > 1 %>
+    Alert #<%= iteration.index %>
+    <% content_tag(:br, nil) unless iteration.last? %>
+  <% end %>
+
+  Hi <%= object.first_name %>,
+  <br />
+  <%= message %>
+</div>
+```
+
+To bypass having a partial and just rendering content directly override the `render_content` method.
+
+```ruby
+# app/components/alert_component.rb
+
+class AlertComponent < Lite::Component::Base
+
+  def render_content
+    content_tag(:span, 'Success', class: "alert-#{l.type}")
+  end
+
+end
 ```
 
 ## Development

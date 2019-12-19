@@ -30,10 +30,10 @@ module Lite
 
       def iterated_collection
         collection.each_with_object([]).with_index do |(object, array), index|
-          component.iteration = Lite::Component::Iteration.new(object, collection_size, index)
-          component.options.deep_merge!(locals: { iteration: component.iteration })
+          component.iteration = Lite::Component::Iteration.new(collection_size, index)
+          component.options.deep_merge!(locals: { object: object, iteration: component.iteration })
 
-          array << component.context.render(component.options)
+          array << component.render_content
           next unless spacer_template && !component.iteration.last?
 
           array << component.context.render(spacer_template)

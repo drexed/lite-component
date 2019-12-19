@@ -3,10 +3,9 @@
 module Lite
   module Component
     class Iteration
-      attr_reader :index, :object, :size
+      attr_reader :index, :size
 
-      def initialize(object, size, index)
-        @object = object
+      def initialize(size, index)
         @size = size
         @index = index
       end

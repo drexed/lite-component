@@ -11,16 +11,16 @@ module Lite
 
       private
 
-      def respond_to_missing?(method_name, include_private = false)
-        locals.key?(method_name)
-      end
-
-      def method_missing(method_name, *arguments)
+      def method_missing(method_name, *arguments, &block)
         if locals.key?(method_name)
           locals[method_name]
         else
           super
         end
+      end
+
+      def respond_to_missing?(method_name, include_private = false)
+        locals.key?(method_name) || super
       end
     end
   end
