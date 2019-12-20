@@ -11,13 +11,6 @@ RSpec.describe Rails::ComponentGenerator, type: :generator do
     run_generator
   end
 
-  let(:js_sample_path) do
-    'vendor/assets/javascripts/lite-frontend.js'
-  end
-  let(:css_sample_path) do
-    'vendor/assets/stylesheets/lite-frontend/modes/web.scss'
-  end
-
   describe '#generator' do
     it 'to be true when javascript file exists' do
       path = 'spec/generators/tmp/app/assets/javascripts/components/sample/test.js'

@@ -5,37 +5,53 @@ require 'rails/generators'
 module Rails
   class ComponentGenerator < Rails::Generators::NamedBase
 
+    source_root File.expand_path('../templates', __FILE__)
+    check_class_collision suffix: 'Component'
+
     class_option :skip_erb, type: :boolean, default: false
     class_option :skip_css, type: :boolean, default: false
     class_option :skip_js, type: :boolean, default: false
 
-    source_root File.expand_path('../templates', __FILE__)
-    check_class_collision suffix: 'Component'
-
-    def create_component_file
-      template('install.rb.erb', "app/components/#{name}_component.rb")
+    def copy_components
+      path = File.join('app', 'components', class_path, "#{file_name}_component.rb")
+      empty_directory('app/components')
+      template('component.rb.tt', path)
     end
 
-    def create_erb_file
+    def create_erbs
       return if options['skip_erb']
 
-      name_parts = name.split('/')
-      file_parts = name_parts[0..-2]
-      file_parts << "_#{name_parts.last}.html.erb"
-
-      create_file("app/views/components/#{file_parts.join('/')}")
+      path = File.join('app', 'views', 'components', class_path, "_#{file_name}.html.erb")
+      empty_directory('app/views')
+      create_file(path)
     end
 
-    def copy_javascript_file
+    def copy_javascripts
       return if options['skip_js']
 
-      copy_file('install.js', "app/assets/javascripts/components/#{name}.js")
+      path = File.join('app', 'assets', 'javascripts', 'components', class_path, "#{file_name}.js")
+      empty_directory('app/assets')
+      template('component.js', path)
     end
 
-    def copy_stylesheet_file
+    # rubocop:disable Layout/LineLength
+    def copy_stylesheets
       return if options['skip_css']
 
-      copy_file('install.scss', "app/assets/stylesheets/components/#{name}.scss")
+      path = File.join('app', 'assets', 'stylesheets', 'components', class_path, "#{file_name}.scss")
+      empty_directory('app/assets')
+      template('component.scss', path)
+    end
+    # rubocop:enable Layout/LineLength
+
+    private
+
+    def file_name
+      @_file_name ||= remove_possible_suffix(super)
+    end
+
+    def remove_possible_suffix(name)
+      name.sub(/_?component$/i, '')
     end
 
   end
