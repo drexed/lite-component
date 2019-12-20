@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'action_view'
 require 'bundler/setup'
 require 'lite/component'
 require 'generator_spec'
