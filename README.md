@@ -45,7 +45,7 @@ Use `rails g component NAME` will generate the following files:
 ```
 app/assets/javascripts/components/[name].js
 app/assets/stylesheets/components/[name].scss
-app/components/[name]_query.rb
+app/components/[name]_component.rb
 app/views/components/_[name].html.erb
 ```
 
