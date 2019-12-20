@@ -42,7 +42,7 @@ Or install it yourself as:
 
 Use `rails g component NAME` will generate the following files:
 
-```
+```erb
 app/assets/javascripts/components/[name].js
 app/assets/stylesheets/components/[name].scss
 app/components/[name]_component.rb

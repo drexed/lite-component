@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
 <% module_namespacing do -%>
-class <%= class_name %>Command < <%= ApplicationComponent.to_s rescue 'Lite::Component::Base' %>
+class <%= class_name %>Component < <%= ApplicationComponent.to_s rescue 'Lite::Component::Base' %>
 end
 <% end -%>
