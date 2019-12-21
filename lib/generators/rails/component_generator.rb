@@ -14,7 +14,6 @@ module Rails
 
     def copy_components
       path = File.join('app', 'components', class_path, "#{file_name}_component.rb")
-      empty_directory('app/components')
       template('component.rb.tt', path)
     end
 
@@ -22,7 +21,6 @@ module Rails
       return if options['skip_erb']
 
       path = File.join('app', 'views', 'components', class_path, "_#{file_name}.html.erb")
-      empty_directory('app/views')
       create_file(path)
     end
 
@@ -30,7 +28,6 @@ module Rails
       return if options['skip_js']
 
       path = File.join('app', 'assets', 'javascripts', 'components', class_path, "#{file_name}.js")
-      empty_directory('app/assets')
       template('component.js', path)
     end
 
@@ -39,7 +36,6 @@ module Rails
       return if options['skip_css']
 
       path = File.join('app', 'assets', 'stylesheets', 'components', class_path, "#{file_name}.scss")
-      empty_directory('app/assets')
       template('component.scss', path)
     end
     # rubocop:enable Layout/LineLength
