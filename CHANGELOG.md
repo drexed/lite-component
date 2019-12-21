@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.5] - 2019-12-21
+### Added
+- Added support for `to_a` and `to_hash` for size check
+
 ## [1.0.4] - 2019-12-20
 ### Changed
 - Fixed generator template name

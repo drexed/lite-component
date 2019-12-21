@@ -28,7 +28,15 @@ module Lite
       private
 
       def collection_size
-        @collection_size ||= collection.size
+        @collection_size ||= begin
+          if collection.respond_to?(:size)
+            collection.size
+          elsif collection.respond_to?(:to_a)
+            collection.to_a.size
+          elsif collection.respond_to?(:to_hash)
+            collection.to_hash.size
+          end
+        end
       end
 
       # rubocop:disable Metrics/AbcSize

@@ -50,7 +50,7 @@ module Lite
 
       def render
         collection = options.delete(:collection)
-        return render_content if collection.nil? || !collection.respond_to?(:to_a)
+        return render_content if collection.nil? || !collection.respond_to?(:each)
 
         Lite::Component::Collection.render(
           collection,

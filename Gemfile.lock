@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    lite-component (1.0.4)
+    lite-component (1.0.5)
       actionview
 
 GEM
