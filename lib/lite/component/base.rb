@@ -64,7 +64,7 @@ module Lite
       end
 
       def to_partial_path
-        "components/#{self.class.component_name}"
+        "components/#{self.class.component_path}"
       end
 
       private

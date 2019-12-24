@@ -7,7 +7,7 @@ RSpec.describe Lite::Component::Collection do
   describe '.render' do
     context 'when collection is an array' do
       it 'to be "content-" 3 times' do
-        component = Component.new(view, collection: [123, 456, 789])
+        component = Nested::Component.new(view, collection: [123, 456, 789])
 
         expect(component.render).to eq('content-content-content-')
       end
@@ -15,7 +15,7 @@ RSpec.describe Lite::Component::Collection do
 
     context 'when collection is an hash' do
       it 'to be "content-" 2 times' do
-        component = Component.new(view, collection: { a: 1, b: 2 })
+        component = Nested::Component.new(view, collection: { a: 1, b: 2 })
 
         expect(component.render).to eq('content-content-')
       end

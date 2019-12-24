@@ -1,15 +1,17 @@
 # frozen_string_literal: true
 
-class Component < Lite::Component::Base
+module Nested
+  class Component < Lite::Component::Base
 
-  def message
-    content_tag(:b, l.name)
+    def message
+      content_tag(:b, l.name)
+    end
+
+    def render_content
+      'content-'
+    end
+
   end
-
-  def render_content
-    'content-'
-  end
-
 end
 
 class View
