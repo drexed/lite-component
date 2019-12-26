@@ -220,7 +220,7 @@ accessed by their key.
 ```
 
 Access to anything provided within its `*_component.rb` file can be done using the
-`component` local which is the instance of the component.
+`component` or `c` local methods which is the instance of the component.
 
 ```erb
 <%# app/views/components/_alert.html.erb %>

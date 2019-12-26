@@ -75,6 +75,7 @@ module Lite
           object: self,
           as: :component,
           locals: {
+            c: self,
             object: nil,
             iteration: iteration
           }
