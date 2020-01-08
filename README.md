@@ -271,7 +271,9 @@ To add components as part of another component build a `block` and `yield` it in
   <%= component("sidebar/navigation", locals: { class_name: "js-nav-links" }) do |c| %>
     <% c.add("sidebar/navigation/link", locals: { text: "Link: 1", path: "/home", active: false }) %>
     <% c.add("sidebar/navigation/link", locals: { text: "Link: 2", path: "/about", active: true }) %>
-    <% c.add("sidebar/navigation/link", locals: { text: "Link: 3", path: "/help", active: false }) %>
+    <% c.add("sidebar/navigation/link", locals: { text: "Link: 3", path: "/help", active: false }) do |n_c| %>
+      <% n_c.add("sidebar/something", locals: { test: "something" }) %>
+    <% end %>
   <% end %>
 </div>
 ```

@@ -11,6 +11,7 @@ module Lite
       attr_reader :context, :options
       attr_writer :iteration
 
+      # rubocop:disable Lint/UnusedMethodArgument
       def initialize(context, options = {}, &block)
         @context = context
         @options = default_options.deep_merge(options)
@@ -19,6 +20,7 @@ module Lite
 
         yield(self) if block_given?
       end
+      # rubocop:enable Lint/UnusedMethodArgument
 
       alias helpers context
       alias c context
@@ -47,8 +49,8 @@ module Lite
 
       end
 
-      def add(name, options = {})
-        components << [name, options]
+      def add(name, options = {}, &block)
+        components << [name, options, block]
       end
 
       def iteration
@@ -102,9 +104,9 @@ module Lite
       end
 
       def yield_content
-        components.map do |name, options|
+        components.map do |name, options, block|
           klass = self.class.build(name)
-          klass.render(context, options)
+          klass.render(context, options, &block)
         end
       end
 
