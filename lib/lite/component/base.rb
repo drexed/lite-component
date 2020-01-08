@@ -7,12 +7,17 @@ module Lite
       include ActionView::Context
       include ActionView::Helpers
 
+      attr_accessor :components
       attr_reader :context, :options
       attr_writer :iteration
 
-      def initialize(context, options = {})
+      def initialize(context, options = {}, &block)
         @context = context
         @options = default_options.deep_merge(options)
+
+        @components = []
+
+        yield(self) if block_given?
       end
 
       alias helpers context
@@ -20,6 +25,12 @@ module Lite
       alias h helpers
 
       class << self
+
+        def build(name)
+          return name if name.respond_to?(:component_path)
+
+          "#{name}_component".classify.constantize
+        end
 
         def component_name
           component_path.split('/').last
@@ -29,11 +40,15 @@ module Lite
           name.underscore.sub('_component', '')
         end
 
-        def render(context, options = {})
-          klass = new(context, options)
+        def render(context, options = {}, &block)
+          klass = new(context, options, &block)
           klass.render
         end
 
+      end
+
+      def add(name, options = {})
+        components << [name, options]
       end
 
       def iteration
@@ -67,6 +82,10 @@ module Lite
         "components/#{self.class.component_path}"
       end
 
+      def yield
+        context.safe_join(yield_content)
+      end
+
       private
 
       def default_options
@@ -80,6 +99,13 @@ module Lite
             iteration: iteration
           }
         }
+      end
+
+      def yield_content
+        components.map do |name, options|
+          klass = self.class.build(name)
+          klass.render(context, options)
+        end
       end
 
     end

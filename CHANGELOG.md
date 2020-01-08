@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.9] - 2020-01-08
+### Added
+- Added block support to yield other components
+### Changed
+- Changed how the helper generated the component
+
 ## [1.0.8] - 2019-12-26
 ### Added
 - Added `c` local variable to access the component

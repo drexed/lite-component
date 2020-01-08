@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nested
-  class Component < Lite::Component::Base
+  class SampleComponent < Lite::Component::Base
 
     def message
       content_tag(:b, l.name)

@@ -262,6 +262,34 @@ class AlertComponent < Lite::Component::Base
 end
 ```
 
+To add components as part of another component build a `block` and `yield` it in the component's view.
+
+```erb
+<%# app/views/components/_sidebar.html.erb %>
+
+<div class="sidebar">
+  <%= component("sidebar/navigation", locals: { class_name: "js-nav-links" }) do |c| %>
+    <% c.add("sidebar/navigation/link", locals: { text: "Link: 1", path: "/home", active: false }) %>
+    <% c.add("sidebar/navigation/link", locals: { text: "Link: 2", path: "/about", active: true }) %>
+    <% c.add("sidebar/navigation/link", locals: { text: "Link: 3", path: "/help", active: false }) %>
+  <% end %>
+</div>
+```
+
+```erb
+<%# app/views/components/sidebar/_navigation.html.erb %>
+
+<div class="sidebar-navigation">
+  <%= c.yield %>
+</div>
+```
+
+```erb
+<%# app/views/components/sidebar/navigation/_link.html.erb %>
+
+<%= link_to(text, path, class: ("active" if l.active)) %>
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
