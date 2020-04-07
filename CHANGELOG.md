@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.10] - 2020-04-06
+### Added
+- Added `render?` method for checking complex logic
+
 ## [1.0.9] - 2020-01-08
 ### Added
 - Added block support to yield other components

@@ -44,8 +44,10 @@ module Lite
         collection.each_with_object([]).with_index do |(object, array), index|
           component.iteration = Lite::Component::Iteration.new(collection_size, index)
           component.options.deep_merge!(locals: { object: object, iteration: component.iteration })
+          content = component.render_content
+          next if content.nil?
 
-          array << component.render_content
+          array << content
           next unless spacer_template && !component.iteration.last?
 
           array << component.context.render(spacer_template)

@@ -44,6 +44,18 @@ RSpec.describe Lite::Component::Base do
     end
   end
 
+  describe '.render?' do
+    it 'to be nil' do
+      component = Nested::SampleComponent.new(view)
+
+      def component.render?
+        false
+      end
+
+      expect(component.render).to eq(nil)
+    end
+  end
+
   describe '.yield' do
     it 'to be "<b>james</b>"' do
       component = Nested::SampleComponent.new(view, locals: { name: 'james' }) do |c|

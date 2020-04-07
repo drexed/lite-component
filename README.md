@@ -104,6 +104,20 @@ Render collection of components just as you would render collections of partials
 <%= component("comment_card", collection: @comments, spacer_template: "components/spacer") %>
 ```
 
+If you can skip rendering by evaluating complex logic in the `render?` method:
+
+```ruby
+# app/components/alert_component.rb
+
+class AlertComponent < Lite::Component::Base
+
+  def render?
+    object.some_complex_check?
+  end
+
+end
+```
+
 ### Context
 
 All components include `ActionView::Context` which will give you access to request context such as

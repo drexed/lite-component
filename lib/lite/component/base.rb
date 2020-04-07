@@ -66,6 +66,8 @@ module Lite
       alias l locals
 
       def render
+        return unless render?
+
         collection = options.delete(:collection)
         return render_content if collection.nil? || !collection.respond_to?(:each)
 
@@ -74,6 +76,10 @@ module Lite
           component: self,
           spacer_template: options.delete(:spacer_template)
         )
+      end
+
+      def render?
+        true
       end
 
       def render_content
