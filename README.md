@@ -160,6 +160,7 @@ end
 ### Locals
 
 All components include access to partial locals via the `locals` or `l` methods.
+You can dump locals to hash via the `to_h` and `to_hash` methods.
 *Note: Objects will be automatically added to locals when rendering collections.*
 
 ```erb

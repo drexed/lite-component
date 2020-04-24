@@ -6,6 +6,9 @@ module Lite
 
       attr_reader :locals
 
+      alias to_hash locals
+      alias to_h locals
+
       def initialize(locals)
         @locals = (locals || {}).symbolize_keys
       end
