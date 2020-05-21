@@ -8,6 +8,11 @@ AllCops:
 Layout/EmptyLinesAroundBlockBody:
   Exclude:
     - 'spec/**/**/*'
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: true
+Layout/EmptyLinesAroundBlockBody:
+  Exclude:
+    - 'spec/**/**/*'
 Layout/EmptyLinesAroundClassBody:
   EnforcedStyle: empty_lines_except_namespace
 Layout/EmptyLinesAroundModuleBody:
@@ -44,3 +49,5 @@ Style/HashTransformKeys:
   Enabled: true
 Style/HashTransformValues:
   Enabled: true
+Style/SlicingWithRange:
+  Enabled: false
