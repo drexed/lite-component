@@ -5,9 +5,9 @@ AllCops:
   TargetRubyVersion: 2.6
   DisplayCopNames: true
   DisplayStyleGuide: true
-Layout/EmptyLinesAroundBlockBody:
-  Exclude:
-    - 'spec/**/**/*'
+  NewCops: enable
+Gemspec/RequiredRubyVersion:
+  Enabled: false
 Layout/EmptyLinesAroundAttributeAccessor:
   Enabled: true
 Layout/EmptyLinesAroundBlockBody:
