@@ -8,7 +8,8 @@ module Nested
     end
 
     def render_content
-      'content-'
+      value = Array(l.object).join('.')
+      "content:#{value}-"
     end
 
   end

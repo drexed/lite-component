@@ -111,6 +111,7 @@ module Lite
 
       def yield_content
         components.map do |name, options, block|
+          puts [name, options].inspect
           klass = self.class.build(name)
           klass.render(context, options, &block)
         end
