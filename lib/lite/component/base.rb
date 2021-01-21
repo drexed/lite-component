@@ -8,23 +8,24 @@ module Lite
       include ActionView::Helpers
 
       attr_accessor :components
-      attr_reader :context, :options
-      attr_writer :iteration
+      attr_reader :context, :iteration, :options
 
-      # rubocop:disable Lint/UnusedMethodArgument
+      # rubocop:disable Layout/LineLength
       def initialize(context, options = {}, &block)
+        @components = []
+        @iteration = (options[:locals] || {}).delete(:iteration) || Lite::Component::Iteration.new(1, 0)
+
         @context = context
         @options = default_options.deep_merge(options)
 
-        @components = []
-
-        yield(self) if block_given?
+        yield(self) if block
       end
-      # rubocop:enable Lint/UnusedMethodArgument
+      # rubocop:enable Layout/LineLength
 
       alias helpers context
       alias c context
       alias h helpers
+      alias i iteration
 
       class << self
 
@@ -53,12 +54,6 @@ module Lite
         components << [name, options, block]
       end
 
-      def iteration
-        @iteration ||= Lite::Component::Iteration.new(1, 0)
-      end
-
-      alias i iteration
-
       def locals
         @locals ||= Lite::Component::Locals.new(options[:locals])
       end
@@ -69,13 +64,9 @@ module Lite
         return unless render?
 
         collection = options.delete(:collection)
-        return render_content if collection.nil? || !collection.respond_to?(:each)
+        return render_collection(collection) if collection.respond_to?(:each)
 
-        Lite::Component::Collection.render(
-          collection,
-          component: self,
-          spacer_template: options.delete(:spacer_template)
-        )
+        render_content
       end
 
       def render?
@@ -109,9 +100,24 @@ module Lite
         }
       end
 
+      # rubocop:disable Metrics/AbcSize
+      def render_collection(collection)
+        collection_size = collection.size
+        spacer_template = options.delete(:spacer_template)
+
+        results = collection.each_with_object([]).with_index do |(item, array), index|
+          array << context.render(spacer_template) if index.positive? && spacer_template
+          iteration = Lite::Component::Iteration.new(collection_size, index)
+          instance = self.class.new(context, locals: { object: item, iteration: iteration })
+          array << instance.render
+        end
+
+        context.safe_join(results)
+      end
+      # rubocop:enable Metrics/AbcSize
+
       def yield_content
         components.map do |name, options, block|
-          puts [name, options].inspect
           klass = self.class.build(name)
           klass.render(context, options, &block)
         end

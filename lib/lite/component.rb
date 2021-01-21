@@ -2,7 +2,7 @@
 
 require 'action_view'
 
-%w[version engine iteration collection locals base].each do |filename|
+%w[version engine iteration locals base].each do |filename|
   require "lite/component/#{filename}"
 end
 

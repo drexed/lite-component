@@ -27,20 +27,38 @@ RSpec.describe Lite::Component::Base do
   end
 
   describe '.render' do
-    it 'to be "content-"' do
-      component = Nested::SampleComponent.new(view)
+    context 'when a single item' do
+      it 'to be "(0)content=-"' do
+        component = Nested::SampleComponent.new(view)
 
-      expect(component.render).to eq('content-')
-    end
-
-    it 'to be "<b>james</b>"' do
-      component = Nested::SampleComponent.new(view, locals: { name: 'james' })
-
-      def component.render_content
-        message
+        expect(component.render).to eq('(0)content=-')
       end
 
-      expect(component.render).to eq('<b>james</b>')
+      it 'to be "<b>james</b>"' do
+        component = Nested::SampleComponent.new(view, locals: { name: 'james' })
+
+        def component.render_content
+          message
+        end
+
+        expect(component.render).to eq('<b>james</b>')
+      end
+    end
+
+    context 'when collection is an array' do
+      it 'to be "(0)content=123-(1)content=456-(2)content=789-"' do
+        component = Nested::SampleComponent.new(view, collection: [123, 456, 789])
+
+        expect(component.render).to eq('(0)content=123-(1)content=456-(2)content=789-')
+      end
+    end
+
+    context 'when collection is an hash' do
+      it 'to be "(0)content=a.1-(1)content=b.2-"' do
+        component = Nested::SampleComponent.new(view, collection: { a: 1, b: 2 })
+
+        expect(component.render).to eq('(0)content=a.1-(1)content=b.2-')
+      end
     end
   end
 
@@ -57,16 +75,12 @@ RSpec.describe Lite::Component::Base do
   end
 
   describe '.yield' do
-    it 'to be "<b>james</b>"' do
+    it 'to be "(0)content=-"' do
       component = Nested::SampleComponent.new(view, locals: { name: 'james' }) do |c|
         c.add(Nested::SampleComponent)
       end
 
-      def component.render_content
-        message
-      end
-
-      expect(component.yield).to eq('content-')
+      expect(component.yield).to eq('(0)content=-')
     end
   end
 

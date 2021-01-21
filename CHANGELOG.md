@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2021-01-20
+### Added
+- Add improved collection rendering
+### Removed
+- Collection class is no longer needed
+
 ## [1.0.11] - 2020-04-24
 ### Added
 - Added `to_h` and  `to_hash` aliases for dumping locals
