@@ -3,8 +3,9 @@
 require 'bundler/setup'
 require 'rails/engine'
 require 'rails/generators'
-require 'lite/component'
 require 'generator_spec'
+
+require 'lite/component'
 
 spec_path = Pathname.new(File.expand_path('../spec', File.dirname(__FILE__)))
 

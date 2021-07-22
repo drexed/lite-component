@@ -4,6 +4,8 @@ require 'action_view' unless defined?(ActionView)
 
 require 'generators/rails/component_generator' if defined?(Rails::Generators)
 
-%w[version engine iteration locals base].each do |filename|
-  require "lite/component/#{filename}"
-end
+require "lite/component/engine" if defined?(Rails::Engine)
+require "lite/component/version"
+require "lite/component/iteration"
+require "lite/component/locals"
+require "lite/component/base"
