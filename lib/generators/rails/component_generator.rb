@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'rails/generators'
-
 module Rails
   class ComponentGenerator < Rails::Generators::NamedBase
 

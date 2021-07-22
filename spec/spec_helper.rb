@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'bundler/setup'
+require 'rails/engine'
+require 'rails/generators'
 require 'lite/component'
 require 'generator_spec'
 
